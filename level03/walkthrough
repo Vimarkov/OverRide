@@ -1,0 +1,8 @@
+We can see that the program ask for a password. The password we submit to it will be 
+subtracted to the value 0x1337d00d and pseudo randomize with rand/srand(time(NULL)). If the
+result of the substraction is under 22 the rand function is not call.
+The program do a xor operation with the string "Q}|u`sfg~sf{}|a3" and the value of our arg.
+If the result string match with congratulation a shell is launch.
+What we can do is brutforce the password until it match.
+
+$> for i in $(seq 322423845 322424845); do echo $i > /tmp/out ; cat /tmp/out - | ./level03 ; done

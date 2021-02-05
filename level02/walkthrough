@@ -1,0 +1,12 @@
+The program don't allow us to bufferflow it. But we can se a printf that print the username
+asked during the execution. If our input is "%x" we can see that an address is printed.
+Just after there is a call to exit function that is present in the global offset table.
+We know now that the program is vulnerable to format string exploit. We can use the %n modifer
+to modify the value of exit global offset table address by the address we want to be executed.
+In our case we can see a call to "system /bin/sh". 
+
+In our exploit.py we need to find the offset of the address we are writing on the stack (got exit address).
+We use the %n modifer store the system address of the program in it. For that we split our
+system address into two short int and we use the %hn modifer.
+
+$> (python /tmp/exploit.py ; cat) | ./level02

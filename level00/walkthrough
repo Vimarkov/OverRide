@@ -1,0 +1,6 @@
+The program launch a shell if we submit him the good password.
+If we reverse it we can see a cmp with 0x149c (5276 in decimal)
+So this is the good password.
+
+$> ./level00
+5276

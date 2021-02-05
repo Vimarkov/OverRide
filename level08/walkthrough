@@ -1,0 +1,14 @@
+The program take one argument that specify a file. The file is store in a file called backup.
+
+$> cd /tmp
+$> touch test ; echo "test" > test
+$> ~/level08 test
+ERROR: Failed to open ./backups/.log
+
+The program read our file but does'nt find the backups file. So we create one that specify the file
+we want to read.
+
+$> cd /tmp
+$> mkdir -p backups/home/users/level09
+$> ~/level08  /home/users/level09/.pass
+$> cat backups/home/users/level09/.pass

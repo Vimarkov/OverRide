@@ -1,0 +1,8 @@
+The problem with this program is that it copy 41 bytes we have written into a space of 40 bytes.
+So it allows us to overwrite the 41th bytes. This byte match with the lenght that is use by strncpy.
+
+We can overwrite the eip of the return address of the function "handle_msg" by changing the 41th bytes
+with a high byte value. Next we only need to change the two lowest bytes of the eip of ret with
+the last two bytes of the function secret_backdoor (that launch a shell).
+
+$> python -c 'print("A" * 40 + "\xca" + "A" * 158 + "cd ../end && cat .pass;" + "B" * 105 + "\x8c\x48")' | ./level09

